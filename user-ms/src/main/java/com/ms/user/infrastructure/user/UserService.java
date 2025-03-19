@@ -1,22 +1,27 @@
 package com.ms.user.infrastructure.user;
 
 import com.ms.user.domain.user.User;
+import jakarta.transaction.Transactional;
+import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 
 @Service
 public class UserService {
 
-    private final UserRepository userRepository;
+    private final UserRepository repository;
 
-    public UserService(UserRepository userRepository) {
-        this.userRepository = userRepository;
+    public UserService(UserRepository repository) {
+        this.repository = repository;
     }
 
-    private void saveUser(User user) {
-
+    @Transactional
+    public UserEntity saveUser(User user) {
+        return repository.save(validatedSaveUser(user));
     }
 
-    public void validatedSaveUser(User user){
-        saveUser(user);
+    private UserEntity validatedSaveUser(User user){
+        UserEntity userEntity = new UserEntity();
+        BeanUtils.copyProperties(user, userEntity);
+        return userEntity;
     }
 }
