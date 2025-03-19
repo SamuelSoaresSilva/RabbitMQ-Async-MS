@@ -1,21 +1,28 @@
-version: "3.8"
+networks:
+  database:
+    driver: bridge
+
 
 services:
 
-  postgres-user:
+  pg-user:
     image: postgres
     environment:
       POSTGRES_DB: user-ms
       POSTGRES_USER: admin
       POSTGRES_PASSWORD: admin
+    networks:
+        - database
     ports:
       - "5432:5432"
 
-  postgres-email:
+  pg-email:
     image: postgres
     environment:
       POSTGRES_DB: email-ms
       POSTGRES_USER: admin
       POSTGRES_PASSWORD: admin
+    networks:
+      - database
     ports:
       - "5433:5432"
