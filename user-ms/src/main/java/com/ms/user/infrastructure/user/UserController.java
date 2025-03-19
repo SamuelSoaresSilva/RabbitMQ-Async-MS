@@ -1,6 +1,9 @@
 package com.ms.user.infrastructure.user;
 
+import com.ms.user.domain.user.User;
+import com.ms.user.main.Response;
 import jakarta.validation.Valid;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -11,16 +14,21 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/api/users")
 public class UserController {
 
-    private final UserService userService;
+    private final UserService service;
 
-    public UserController(UserService userService) {
-        this.userService = userService;
+    public UserController(UserService service) {
+        this.service = service;
     }
 
     @PostMapping()
-    public ResponseEntity<?> saveUser(@RequestBody @Valid UserEntity userEntity) {
+    public ResponseEntity<Response<UserEntity>> saveUser(@RequestBody @Valid User user) {
 
-        return ResponseEntity.ok().build();
+        return ResponseEntity
+                .status(HttpStatus.CREATED)
+                .body(new Response<>(
+                        HttpStatus.CREATED,
+                        "User created",
+                        service.saveUser(user)));
     }
 
 }
